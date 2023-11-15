@@ -2,7 +2,7 @@
 FROM node:14
 
 # Créer le répertoire de travail de l'application
-WORKDIR /app
+WORKDIR /
 
 # Copier les fichiers nécessaires dans le conteneur
 COPY package*.json ./
@@ -11,10 +11,10 @@ COPY package*.json ./
 RUN npm install
 
 # Copier les fichiers de l'application dans le conteneur
-COPY . .
+COPY src/ .
 
 # Exposer le port sur lequel votre application s'exécute
 EXPOSE 5000
 
 # Commande pour démarrer l'application
-CMD ["node", "app.js"]
+CMD ["node", "index.js"]
