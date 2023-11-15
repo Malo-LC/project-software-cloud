@@ -1,0 +1,29 @@
+.adminliste {
+    width: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.admin {
+    background-color: #c9e4e7;
+    border-radius: 30px;
+    padding: 30px;
+    margin: 30px;
+    margin-top: 50px;
+}
+
+.mdp {
+    display: flex;
+    flex-direction: row;
+}
+
+.input {
+    margin: 5px;
+    background: #6aaeb5;
+    height: 40px;
+    font-size: 16px;
+    width: 10vw;
+    border: none;
+    border-radius: 5px;
+    text-overflow: ellipsis;
+}

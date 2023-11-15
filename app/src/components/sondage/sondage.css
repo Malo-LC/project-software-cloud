@@ -1,0 +1,84 @@
+.sondageList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.sondageItem {
+  width: 30vw;
+  min-width: 300px;
+  padding: 10px;
+  background-color: #006d77;
+  border-radius: 20px;
+  color: #e2f4f6;
+  text-decoration: none;
+  margin: 30px;
+}
+
+.descSondage {
+  width: 50%;
+}
+.sondageSpec {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.sondageBig {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.sondage {
+  background-color: #c9e4e7;
+  border-radius: 30px;
+  padding: 30px;
+  margin: 30px;
+  margin-top: 30px;
+}
+.sondage .button-31user {
+  background-color: #44878d;
+}
+
+.oui {
+  background-color: green;
+}
+
+.non {
+  background-color: #006d77;
+}
+
+.bouttonSondage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.spaceMilieu {
+  width: 300px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.sondageSpec {
+  background-color: #c9e4e7;
+  border-radius: 30px;
+  padding: 30px;
+  margin: 30px;
+  margin-top: 30px;
+}
+
+.resultatSondageItem {
+  border: solid black 1px;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: #eff3f3;
+}

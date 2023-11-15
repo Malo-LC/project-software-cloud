@@ -1,0 +1,116 @@
+svg {
+  width: 7vh;
+  height: 7vh;
+  margin: 3vh;
+  color: white;
+}
+
+.App {
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.Home {
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.NavBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #006d77;
+  height: 8vh;
+  margin: 0px;
+  width: 100%;
+}
+
+.Presentation {
+  margin-left: 15%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: white;
+  font-family: \'Source Code Pro\', monospace;
+}
+
+.PresentationTitre {
+  font-size: calc(20px + 7.5vw);
+  margin: 50px 0px 50px 0px;
+  font-weight: bold;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #006d77;
+  height: 70px;
+  width: 100%;
+
+}
+
+
+.logos {
+  margin: 0;
+  margin-left: 10px;
+  margin-top: -5px;
+  height: 100%;
+}
+
+.logo {
+  height: 110%;
+  width: 110%;
+}
+
+.mt {
+  margin-top: 10px;
+}
+
+.navigation {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.presentationAcceuil {
+  margin: 0;
+  padding: 0;
+  font-size: calc(18px + 5vw);
+}
+
+.separator {
+  border-left: 1vh solid white;
+  height: 100%;
+}
+
+.videoTag {
+  position: fixed;
+  z-index: -1;
+  background-size: cover;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.button-31propos {
+  background-color: #44878d;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+  width: auto;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  border-radius: 5px;
+}
+
+.content {
+  min-height: calc(100vh - 70px);
+}

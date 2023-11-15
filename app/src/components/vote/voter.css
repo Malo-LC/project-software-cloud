@@ -1,0 +1,14 @@
+.dejaVoterBig {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.dejaVoter {
+  background-color: #006d77;
+  border-radius: 20px;
+  color: #e2f4f6;
+  padding: 30px;
+  margin: 30px;
+  margin-bottom: 150px;
+}

@@ -1,0 +1,16 @@
+.multiStep {
+  background-color: #006d77;
+  border-radius: 20px;
+  width: 30vw;
+  color: #e2f4f6;
+  padding: 30px;
+  margin: 30px;
+  min-width: 250px;
+  margin-bottom: 10vh;
+}
+
+.multiStepBig {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

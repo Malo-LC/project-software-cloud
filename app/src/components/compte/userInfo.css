@@ -1,0 +1,52 @@
+.button-31user {
+  background-color: #006d77;
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+  width: auto;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.button-31user2 {
+  background-color: #006d77;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1vw;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  margin-right: 50px;
+  border-radius: 5px;
+  width: 8vw;
+  font-size: calc(8px + 0.4vw);
+  min-width: 100px;
+}
+
+.InfoBig {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.Info {
+  background-color: #c9e4e7;
+  border-radius: 30px;
+  padding: 30px;
+  margin: 30px;
+  margin-top: 50px;
+}
+
+.connected {
+  margin: 25px;
+}
+
+.InfoBig p{
+  font-size: calc(8px + (26 - 14) * ((100vw - 300px) / (1600 - 300)));
+}

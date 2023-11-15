@@ -1,0 +1,29 @@
+.candidatPhoto {
+  width: 7vw;
+  height: 7vw;
+  border-radius: 50%;
+  object-fit: cover;
+  min-width: 60px;
+  min-height: 60px;
+}
+
+.candidatsTable {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.candidat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.5vw;
+  border-radius: 10px;
+  background-color: #c9e4e7;
+  padding: 1vw;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+  min-width: 100px;
+  min-height: 120px;
+}

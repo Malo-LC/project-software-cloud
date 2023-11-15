@@ -1,0 +1,25 @@
+.flexRowEven {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+.m {
+  margin: 3px;
+}
+.p {
+  padding: 20px;
+}
+
+.pForm {
+  padding: 0;
+  margin: 0;
+}
+
+.CreerListeCandidat{
+  background-color: #c9e4e7;
+  border-radius: 30px;
+  padding: 30px;
+  margin: 30px;
+}
+
