@@ -11,13 +11,20 @@ const bcrypt = require("bcrypt");
 
 // Inintialisation de la bdd
 let options = {
-  host: "localhost",
+  host: "mysql-service",
   user: "root",
   port: 3306,
   password: "password",
   database: "safevote",
 };
 const db = mysql.createConnection(options);
+db.connect((err) => {
+  if (err) {
+    console.log(err);
+    return;
+  }
+  console.log("Connected to database");
+});
 let sessionStore = new MySQLStore({}, db);
 
 // Initialisation de passport et de la session

@@ -1,32 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-app
+  name: front-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: node-app
+      app: front-app
   template:
     metadata:
       labels:
-        app: node-app
+        app: front-app
     spec:
       containers:
-        - name: node-app
-          image: localhost:3000/backend:1.0
+        - name: front-app
+          image: localhost:3000/frontend:1.0
           ports:
-            - containerPort: 5000
+            - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: node-app-service
+  name: front-app-service
 spec:
   selector:
-    app: node-app
+    app: front-app
   ports:
     - protocol: TCP
-      port: 5000
-      targetPort: 5000
+      port: 3000
+      targetPort: 3000
   type: LoadBalancer
+  externalIPs:
+    - 127.0.0.1
