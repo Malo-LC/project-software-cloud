@@ -1,8 +1,8 @@
-import { React, useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './sondage.css';
-import { ENDPOINT } from '../config';
+import { React, useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./sondage.css";
+import { ENDPOINT } from "../config";
 
 export function Sondage() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ export function Sondage() {
       })
       .then((res) => {
         if (!res.data.auth) {
-          navigate('/login');
+          navigate("/login");
         }
       })
       .catch((error) => {
@@ -55,11 +55,7 @@ export function Sondage() {
         <p>Voici les sondages disponibles :</p>
         <div className="sondageList">
           {sondages.map((sondage) => (
-            <Link
-              className="sondageItem"
-              key={sondage.idSondage}
-              to={`/sondage/${sondage.idSondage}`}
-            >
+            <Link className="sondageItem" key={sondage.id} to={`/sondage/${sondage.id}`}>
               <h1>{sondage.titre}</h1>
               <p>{sondage.descr}</p>
             </Link>

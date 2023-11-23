@@ -1,17 +1,17 @@
-import { React, useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { ENDPOINT } from '../config';
+import { React, useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { ENDPOINT } from "../config";
 
 export function SondageSpec() {
   const [sondage, setSondage] = useState([]);
   const [voteSondage, setVoteSondage] = useState(1);
   const [vote, setVote] = useState([]);
   const [selectedButton, setSelectedButton] = useState([
-    { active: 'non' },
-    { active: 'non' },
-    { active: 'non' },
-    { active: 'non' },
+    { active: "non" },
+    { active: "non" },
+    { active: "non" },
+    { active: "non" },
   ]);
   const [resultatSondage, setResultatSondage] = useState([
     { prct: 0 },
@@ -25,7 +25,7 @@ export function SondageSpec() {
     axios
       .get(`${ENDPOINT}/getSondage/${id}`)
       .then((res) => {
-        setSondage(res.data.sondage[0]);
+        setSondage(res.data.sondage);
       })
       .catch((err) => {
         console.log(err);
@@ -93,46 +93,46 @@ export function SondageSpec() {
       .finally(() => {
         setVoteSondage(0);
         setSelectedButton([
-          { active: 'non' },
-          { active: 'non' },
-          { active: 'non' },
-          { active: 'non' },
+          { active: "non" },
+          { active: "non" },
+          { active: "non" },
+          { active: "non" },
         ]);
-        alert('Votre vote a bien été pris en compte');
+        alert("Votre vote a bien été pris en compte");
       });
   }
   function bouttonClick(e) {
     setVoteSondage(e);
     if (e === 1) {
       setSelectedButton([
-        { active: 'oui' },
-        { active: 'non' },
-        { active: 'non' },
-        { active: 'non' },
+        { active: "oui" },
+        { active: "non" },
+        { active: "non" },
+        { active: "non" },
       ]);
     }
     if (e === 2) {
       setSelectedButton([
-        { active: 'non' },
-        { active: 'oui' },
-        { active: 'non' },
-        { active: 'non' },
+        { active: "non" },
+        { active: "oui" },
+        { active: "non" },
+        { active: "non" },
       ]);
     }
     if (e === 3) {
       setSelectedButton([
-        { active: 'non' },
-        { active: 'non' },
-        { active: 'oui' },
-        { active: 'non' },
+        { active: "non" },
+        { active: "non" },
+        { active: "oui" },
+        { active: "non" },
       ]);
     }
     if (e === 4) {
       setSelectedButton([
-        { active: 'non' },
-        { active: 'non' },
-        { active: 'non' },
-        { active: 'oui' },
+        { active: "non" },
+        { active: "non" },
+        { active: "non" },
+        { active: "oui" },
       ]);
     }
   }
@@ -153,7 +153,7 @@ export function SondageSpec() {
     if (choixStr === 4) {
       return sondage.option4;
     }
-    return 'Aucun choix';
+    return "Aucun choix";
   }
   return (
     <div className="sondageBig">
@@ -190,41 +190,33 @@ export function SondageSpec() {
               <button
                 type="button"
                 onClick={() => bouttonClick(1)}
-                className={`${selectedButton[0].active} button-31user`}
-              >
+                className={`${selectedButton[0].active} button-31user`}>
                 {sondage.option1}
               </button>
               <button
                 type="button"
                 onClick={() => bouttonClick(2)}
-                className={`${selectedButton[1].active} button-31user`}
-              >
+                className={`${selectedButton[1].active} button-31user`}>
                 {sondage.option2}
               </button>
-              {sondage.option3 !== 'undefined' && (
+              {sondage.option3 !== "undefined" && (
                 <button
                   type="button"
                   onClick={() => bouttonClick(3)}
-                  className={`${selectedButton[2].active} button-31user`}
-                >
+                  className={`${selectedButton[2].active} button-31user`}>
                   {sondage.option3}
                 </button>
               )}
-              {sondage.option4 !== 'undefined' && (
+              {sondage.option4 !== "undefined" && (
                 <button
                   onClick={() => bouttonClick(4)}
                   type="button"
-                  className={`${selectedButton[3].active} button-31user`}
-                >
+                  className={`${selectedButton[3].active} button-31user`}>
                   {sondage.option4}
                 </button>
               )}
             </div>
-            <button
-              type="button"
-              className="button-31user mt"
-              onClick={soumettreVote}
-            >
+            <button type="button" className="button-31user mt" onClick={soumettreVote}>
               Soumettre
             </button>
           </div>

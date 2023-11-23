@@ -85,18 +85,18 @@ data:
         option2 varchar (100),
         option3 varchar (100),
         option4 varchar (100),
-        userID int
+        userId int
     );
 
     insert into sondage(titre,descr,option1,option2,option3,option4) values ('Sondage politique',"S'il y avait des élections générales demain, pour quel parti voteriez-vous?",'droite','centre','gauche','abstention');
 
     drop table if exists voteListe;
 
-    CREATE TABLE voteListe(idUser INT, idCandidat INT, idListe int);
+    CREATE TABLE voteListe(userId INT, idCandidat INT, idListe int);
 
     drop table if exists voteSondage;
 
-    create table voteSondage(idUser int, idSondage int, choix int);
+    create table voteSondage(userId int, idSondage int, choix int);
 
     INSERT INTO
         listeElectorale(idListe, nomListe)
@@ -174,7 +174,7 @@ data:
             'malo@gmail.com',
             'Master',
             'Malo',
-            '$2b$10$L3EjdaIp7mhposf.awcCoOh1h4rJUT5EiTLbYQOSmqziHy9bIxNhW',
+            '$2b$10$VkBHNpCLvB.HnvEuESIpculNBHRqpy.AwuPvALUEUaS/wSBR1ohjK',
             '12-05-2001',
             'Mr',
             '0684456257'

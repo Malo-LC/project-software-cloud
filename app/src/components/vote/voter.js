@@ -1,15 +1,15 @@
-import axios from 'axios';
-import { useEffect, useState, React } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { MultiStepVote } from '../stepsForm/multiStep';
-import './voter.css';
-import { ENDPOINT } from '../config';
+import axios from "axios";
+import { useEffect, useState, React } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { MultiStepVote } from "../stepsForm/multiStep";
+import "./voter.css";
+import { ENDPOINT } from "../config";
 
 export function Voter() {
   const navigate = useNavigate();
   const location = useLocation();
   const [vote, setVote] = useState(true);
-  const idListe = useLocation().pathname.split('/').pop();
+  const idListe = useLocation().pathname.split("/").pop();
   const [candidats, setCandidats] = useState([]);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export function Voter() {
       })
       .then((res) => {
         if (!res.data.auth) {
-          navigate('/login');
+          navigate("/login");
         }
       })
       .catch((error) => {

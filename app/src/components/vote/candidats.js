@@ -1,16 +1,16 @@
-import axios from 'axios';
-import { useState, useEffect, React } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
-import './candidats.css';
-import { Voter } from './voter';
-import { ENDPOINT } from '../config';
+import axios from "axios";
+import { useState, useEffect, React } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import "./candidats.css";
+import { Voter } from "./voter";
+import { ENDPOINT } from "../config";
 
 export function Candidats() {
   const location = useLocation();
   const [candidats, setCandidats] = useState([]);
   const [liste, setListe] = useState([]);
   const navigate = useNavigate();
-  const idListe = useLocation().pathname.split('/').pop();
+  const idListe = useLocation().pathname.split("/").pop();
 
   useEffect(() => {
     axios
@@ -19,7 +19,7 @@ export function Candidats() {
       })
       .then((res) => {
         if (!res.data.auth) {
-          navigate('/login');
+          navigate("/login");
         }
       })
       .catch((error) => {
@@ -65,22 +65,18 @@ export function Candidats() {
       </div>
     );
   }
-  if (liste.length === 0) {
+  if (!liste) {
     return <div>Chargement...</div>;
   }
 
   return (
     <div className="candidats">
       <h1 className="h1Candidats">Liste des candidats</h1>
-      <h2 className="h1Candidats">{liste[0].nomListe}</h2>
+      <h2 className="h1Candidats">{liste.nomListe}</h2>
       <div className="candidatsTable">
         {candidats.map((candidat) => (
-          <div className="candidat" key={candidat.idCandidat}>
-            <img
-              src={candidat.photo}
-              alt="candidat"
-              className="candidatPhoto"
-            />
+          <div className="candidat" key={candidat.id}>
+            <img src={candidat.photo} alt="candidat" className="candidatPhoto" />
             <div className="candidatInfo">
               <h2 className="h2Candidat">
                 {candidat.prenomC} {candidat.nomC}

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
@@ -8,24 +9,21 @@ const MySQLStore = require("express-mysql-session")(session);
 const path = require("path");
 const app = express();
 const bcrypt = require("bcrypt");
-
-// Inintialisation de la bdd
+const Utilisateur = require("./models/Utilisateurs");
+const Candidat = require("./models/Candidats");
+const VoteListe = require("./models/VoteListe");
+const VoteSondage = require("./models/VoteSondage");
+const Sondage = require("./models/Sondage");
+const ListeElectorale = require("./models/ListeElectorale");
 let options = {
-  host: "mysql-service",
+  host: process.env.DB_HOST,
   user: "root",
   port: 3306,
   password: "password",
   database: "safevote",
 };
-const db = mysql.createConnection(options);
-db.connect((err) => {
-  if (err) {
-    console.log(err);
-    return;
-  }
-  console.log("Connected to database");
-});
-let sessionStore = new MySQLStore({}, db);
+
+const sessionStore = new MySQLStore(options);
 
 // Initialisation de passport et de la session
 app.use(express.json());
@@ -52,7 +50,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate("session"));
-initializePassport(passport, db);
+initializePassport(passport);
 
 function getAge(dateString) {
   var today = new Date();
@@ -65,71 +63,52 @@ function getAge(dateString) {
   return age;
 }
 
-app.post("/register", (req, res) => {
-  let verif = false;
-  const isAlreadyInDB = "SELECT * FROM utilisateurs";
-  db.query(isAlreadyInDB, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      for (let i = 0; i < result.length; i++) {
-        if (result[i].email === req.body.email) {
-          res.send("Email");
-          verif = true;
-          break;
-        }
-        if (result[i].tel === req.body.tel) {
-          verif = true;
-          res.send("Tel");
-          break;
-        }
-        console.log(getAge(req.body.dateDeNaissance));
-        if (getAge(req.body.dateDeNaissance) < 18) {
-          verif = true;
-          res.send("Age");
-          break;
-        }
-      }
-      if (res)
-        if (!verif) {
-          const { email, password, nom, prenom, dateDeNaissance, tel, genre } = req.body;
-          const HashedPassword = bcrypt.hashSync(password, 10);
-          const query = `INSERT INTO utilisateurs (email, password, nom, prenom, dateDeNaissance, genre, tel) VALUES ('${email}', '${HashedPassword}','${nom}','${prenom}','${dateDeNaissance}','${genre}','${tel}')`;
-          db.query(query, (err, result) => {
-            if (err) {
-              res.status(500).send(err);
-              console.log(err);
-            } else {
-              res.send("Inscription réussie");
-            }
-          });
-        }
+app.post("/register", async (req, res) => {
+  const users = await Utilisateur.findAll();
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].email === req.body.email) {
+      return res.send("Email");
     }
+    if (users[i].tel === req.body.tel) {
+      return res.send("Tel");
+    }
+    if (getAge(req.body.dateDeNaissance) < 18) {
+      return res.send("Age");
+    }
+  }
+  const { email, password, nom, prenom, dateDeNaissance, tel, genre } = req.body;
+  const HashedPassword = bcrypt.hashSync(password, 10);
+  await Utilisateur.create({
+    email: email,
+    password: HashedPassword,
+    nom: nom,
+    prenom: prenom,
+    dateDeNaissance: dateDeNaissance,
+    genre: genre,
+    tel: tel,
   });
+  return res.status(204);
 });
 
 app.post("/login", (req, res, next) => {
   passport.authenticate("local", {}, (err, user) => {
     if (err) {
       console.log(err);
-      res.sendStatus(500);
+      res.status(500).send("Erreur serveur");
       return;
     }
     if (!user) {
-      res.json({
+      return res.json({
         message: false,
       });
-      return;
     } else {
       req.login(user, (err) => {
         if (err) {
           console.log(err);
-          res.sendStatus(500);
-          return;
+          return res.status(500).send("Erreur serveur");
         } else {
           res.send(true);
-          next();
-          return;
+          return next();
         }
       });
     }
@@ -162,193 +141,124 @@ app.get("/checkAuthentication", (req, res) => {
   }
 });
 
-app.get("/getUser", (req, res) => {
-  const query = `SELECT * FROM utilisateurs WHERE email = '${req.user.email}'`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        email: result[0].email,
-        nom: result[0].nom,
-        prenom: result[0].prenom,
-        tel: result[0].tel,
-        genre: result[0].genre,
-      });
-    }
+app.get("/getUser", async (req, res) => {
+  const user = await Utilisateur.findOne({
+    where: {
+      email: req.user.email,
+    },
+  });
+  return res.status(200).json({
+    email: user.email,
+    nom: user.nom,
+    prenom: user.prenom,
+    tel: user.tel,
+    genre: user.genre,
   });
 });
 
-app.get("/candidats/:id", (req, res) => {
-  const query = `SELECT * FROM candidats WHERE idListeElec = '${req.params.id}'`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        candidats: result,
-      });
-    }
+app.get("/candidats/:id", async (req, res) => {
+  const candidats = await Candidat.findAll({
+    where: {
+      idListeElec: req.params.id,
+    },
   });
+  return res.status(200).json({ candidats });
 });
 
-app.get("/candidats", (req, res) => {
-  const query = `SELECT * FROM candidats`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        candidats: result,
-      });
-    }
-  });
+app.get("/candidats", async (req, res) => {
+  const candidats = await Candidat.findAll();
+  return res.status(200).json({ candidats });
 });
 
-app.post("/checkVote", (req, res) => {
-  const query = `SELECT * FROM voteListe WHERE idUser = '${req.user.id}' and idListe = '${req.body.idListeElec}'`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        vote: result,
-      });
-    }
+app.post("/checkVote", async (req, res) => {
+  const voteListe = await VoteListe.findAll({
+    where: {
+      userId: req.user.id,
+      id: req.body.idListeElec,
+    },
   });
+  return res.status(200).json({ vote: voteListe });
 });
 
-app.get("/checkVoteSondage/:id", (req, res) => {
-  const query = `SELECT * FROM voteSondage WHERE idUser = '${req.user.id}' and idSondage = '${req.params.id}'`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        vote: result,
-      });
-    }
+app.get("/checkVoteSondage/:id", async (req, res) => {
+  const voteSondage = await VoteSondage.findAll({
+    where: {
+      userId: req.user.id,
+      idSondage: req.params.id,
+    },
   });
+  return res.status(200).json({ vote: voteSondage });
 });
 
-app.post("/vote", (req, res) => {
-  const query = `INSERT INTO voteListe (idUser, idCandidat, idListe) VALUES ('${req.user.id}', '${req.body.idCandidat}', '${req.body.idListeElec}')`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        vote: result,
-      });
-    }
+app.post("/vote", async (req, res) => {
+  const vote = await VoteListe.create({
+    userId: req.user.id,
+    idCandidat: req.body.idCandidat,
+    idListe: req.body.idListeElec,
   });
+  return res.status(200).json({ vote });
 });
 
-app.post("/creerSondage", (req, res) => {
+app.post("/creerSondage", async (req, res) => {
   const { titre, description, option1, option2, option3, option4 } = req.body;
   const id = req.user.id;
 
-  const query = `INSERT INTO sondage (userID, titre, descr, option1, option2, option3,option4) VALUES ('${id}', '${titre}', '${description}', '${option1}', '${option2}', '${option3}','${option4}')`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        sondage: result,
-      });
-    }
+  const sondage = await Sondage.create({
+    userId: id,
+    titre: titre,
+    descr: description,
+    option1: option1,
+    option2: option2,
+    option3: option3,
+    option4: option4,
   });
+  return res.status(200).json({ sondage });
 });
 
-app.get("/getSondages", (req, res) => {
-  const query = `SELECT * FROM sondage`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        sondages: result,
-      });
-    }
-  });
+app.get("/getSondages", async (req, res) => {
+  const sondages = await Sondage.findAll();
+  return res.status(200).json({ sondages });
 });
 
-app.get("/getSondage/:id", (req, res) => {
-  const query = `SELECT * FROM sondage WHERE idSondage = '${req.params.id}'`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        sondage: result,
-      });
-    }
+app.get("/getSondage/:id", async (req, res) => {
+  const sondage = await Sondage.findOne({
+    where: {
+      id: req.params.id,
+    },
   });
+  return res.status(200).json({ sondage });
 });
 
-app.post("/voteSondage/:id", (req, res) => {
-  const query = `INSERT INTO voteSondage (idUser, idSondage, choix) VALUES ('${req.user.id}', '${req.params.id}','${req.body.vote}')`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        vote: result,
-      });
-    }
+app.post("/voteSondage/:id", async (req, res) => {
+  const vote = await VoteSondage.create({
+    userId: req.user.id,
+    idSondage: req.params.id,
+    choix: req.body.vote,
   });
+  return res.status(200).json({ vote });
 });
 
-app.get("/listes", (req, res) => {
-  const query = `SELECT * FROM listeElectorale`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        listes: result,
-      });
-    }
-  });
+app.get("/listes", async (req, res) => {
+  const listes = await ListeElectorale.findAll();
+  return res.status(200).json({ listes });
 });
 
-app.get("/listes/:id", (req, res) => {
-  const query = `SELECT * FROM listeElectorale WHERE idListe = '${req.params.id}'`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        liste: result,
-      });
-    }
+app.get("/listes/:id", async (req, res) => {
+  const liste = await ListeElectorale.findOne({
+    where: {
+      id: req.params.id,
+    },
   });
+  return res.status(200).json({ liste });
 });
 
-app.get("/getResultatsondage/:id", (req, res) => {
-  const query = `SELECT * FROM voteSondage WHERE idSondage = '${req.params.id}'`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        res: result,
-      });
-    }
+app.get("/getResultatsondage/:id", async (req, res) => {
+  const vote = await VoteSondage.findAll({
+    where: {
+      idSondage: req.params.id,
+    },
   });
+  return res.status(200).json({ res: vote });
 });
 
 app.post("/adminliste", (req, res) => {
@@ -364,34 +274,26 @@ app.post("/adminliste", (req, res) => {
   }
 });
 
-app.post("/creerListe", (req, res) => {
+app.post("/creerListe", async (req, res) => {
   const { titre } = req.body;
   const query = `INSERT INTO listeElectorale (nomListe) VALUES ('${titre}')`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        liste: result,
-      });
-    }
+  const liste = await ListeElectorale.create({
+    nomListe: titre,
   });
+  return res.status(200).json({ liste });
 });
 
-app.post("/creerCandidat", (req, res) => {
+app.post("/creerCandidat", async (req, res) => {
   const { nom, prenom, idListeElec, photo, parti } = req.body;
   const query = `INSERT INTO candidats (nomC, prenomC, idListeElec,photo,partiPolitique) VALUES ('${nom}', '${prenom}', '${idListeElec}','${photo}','${parti}')`;
-  db.query(query, (err, result) => {
-    if (err) {
-      res.status(500).send(err);
-      console.log(err);
-    } else {
-      res.status(200).json({
-        candidat: result,
-      });
-    }
+  const candidat = await Candidat.create({
+    nomC: nom,
+    prenomC: prenom,
+    idListeElec: idListeElec,
+    photo: photo,
+    partiPolitique: parti,
   });
+  return res.status(200).json({ candidat });
 });
 
 app.listen(5000, () => {

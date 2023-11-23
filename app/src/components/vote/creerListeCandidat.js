@@ -1,29 +1,29 @@
-import { React, useState, useEffect } from 'react';
-import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import axios from 'axios';
-import './creerListeCandidat.css';
-import { ENDPOINT } from '../config';
+import { React, useState, useEffect } from "react";
+import * as Yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import "./creerListeCandidat.css";
+import { ENDPOINT } from "../config";
 
 export function CreerListeCandidat() {
-  const [photo, setPhoto] = useState('');
+  const [photo, setPhoto] = useState("");
   const [listes, setListes] = useState([]);
-  const [titre, setTitre] = useState('');
+  const [titre, setTitre] = useState("");
   const candidatSchema = Yup.object().shape({
-    liste: Yup.string().required('Une liste est requise'),
+    liste: Yup.string().required("Une liste est requise"),
     nom: Yup.string()
-      .required('Un nom est requis')
-      .min(1, 'Le nom fait au moins 1 caractère')
-      .max(50, 'Le nom fait ne doit pas faire plus de 50 caractères'),
+      .required("Un nom est requis")
+      .min(1, "Le nom fait au moins 1 caractère")
+      .max(50, "Le nom fait ne doit pas faire plus de 50 caractères"),
     prenom: Yup.string()
-      .required('Un prenom est requis')
-      .min(1, 'Le prenom fait au moins 1 caractère')
-      .max(50, 'Le prenom fait ne doit pas faire plus de 50 caractères'),
+      .required("Un prenom est requis")
+      .min(1, "Le prenom fait au moins 1 caractère")
+      .max(50, "Le prenom fait ne doit pas faire plus de 50 caractères"),
     parti: Yup.string()
-      .required('Un parti est requis')
-      .min(1, 'Le parti fait au moins 1 caractère')
-      .max(50, 'Le parti fait ne doit pas faire plus de 50 caractères'),
+      .required("Un parti est requis")
+      .min(1, "Le parti fait au moins 1 caractère")
+      .max(50, "Le parti fait ne doit pas faire plus de 50 caractères"),
   });
 
   useEffect(() => {
@@ -43,14 +43,13 @@ export function CreerListeCandidat() {
     reset,
     formState: { errors },
   } = useForm({
-    mode: 'onTouched',
+    mode: "onTouched",
     resolver: yupResolver(candidatSchema),
   });
 
   function creerListe() {
-    console.log(titre);
-    if (titre === '') {
-      alert('Veuillez entrer un titre');
+    if (titre === "") {
+      alert("Veuillez entrer un titre");
       return;
     }
     axios
@@ -58,13 +57,13 @@ export function CreerListeCandidat() {
         titre: titre,
       })
       .then(() => {
-        alert('Liste créée');
+        alert("Liste créée");
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        setTitre('');
+        setTitre("");
       });
   }
   function creerCandidat(data) {
@@ -77,14 +76,14 @@ export function CreerListeCandidat() {
         photo: photo,
       })
       .then(() => {
-        alert('Candidat créée');
+        alert("Candidat créée");
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
         reset();
-        setPhoto('');
+        setPhoto("");
       });
   }
 
@@ -110,64 +109,43 @@ export function CreerListeCandidat() {
               />
             </div>
 
-            <button
-              className="button-31"
-              type="button"
-              onClick={() => creerListe()}
-            >
+            <button className="button-31" type="button" onClick={() => creerListe()}>
               Creer
             </button>
           </form>
         </div>
         <div className="creerCandidat">
           <h1>Ajouter un candidat</h1>
-          <form
-            autoComplete="off"
-            onSubmit={handleSubmit(onSubmitCandidat)}
-            className="register p"
-          >
+          <form autoComplete="off" onSubmit={handleSubmit(onSubmitCandidat)} className="register p">
             <div className="flexColumn">
               <p className="pForm">Liste</p>
-              <select className="inputRegister" {...register('liste')}>
+              <select className="inputRegister" {...register("liste")}>
                 {listes.map((liste) => (
-                  <option key={liste.idListe} value={liste.idListe}>
+                  <option key={liste.id} value={liste.id}>
                     {liste.nomListe}
                   </option>
                 ))}
               </select>
-              {errors.liste && (
-                <p className="errorRegister">{errors.liste.message}</p>
-              )}
+              {errors.liste && <p className="errorRegister">{errors.liste.message}</p>}
 
-              <input
-                type="text"
-                className="inputRegister"
-                placeholder="Nom"
-                {...register('nom')}
-              />
-              {errors.nom && (
-                <p className="errorRegister">{errors.nom.message}</p>
-              )}
+              <input type="text" className="inputRegister" placeholder="Nom" {...register("nom")} />
+              {errors.nom && <p className="errorRegister">{errors.nom.message}</p>}
 
               <input
                 type="text"
                 className="inputRegister"
                 placeholder="Prenom"
-                {...register('prenom')}
+                {...register("prenom")}
               />
-              {errors.prenom && (
-                <p className="errorRegister">{errors.prenom.message}</p>
-              )}
+              {errors.prenom && <p className="errorRegister">{errors.prenom.message}</p>}
 
               <input
                 type="text"
                 className="inputRegister"
                 placeholder="Parti politique"
-                {...register('parti')}
+                {...register("parti")}
               />
-              {errors.parti && (
-                <p className="errorRegister">{errors.parti.message}</p>
-              )}
+              {errors.parti && <p className="errorRegister">{errors.parti.message}</p>}
 
               <input
                 type="text"
@@ -176,9 +154,7 @@ export function CreerListeCandidat() {
                 value={photo}
                 onChange={(e) => setPhoto(e.target.value)}
               />
-              {photo && (
-                <img src={photo} alt="" className="candidatPhotoPetit m" />
-              )}
+              {photo && <img src={photo} alt="" className="candidatPhotoPetit m" />}
             </div>
             <button className="button-31" type="submit">
               Ajouter

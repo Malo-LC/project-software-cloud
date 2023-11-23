@@ -1,10 +1,10 @@
-import { React, useState, useEffect } from 'react';
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
-import './listes.css';
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab';
-import { ENDPOINT } from '../config';
+import { React, useState, useEffect } from "react";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import "./listes.css";
+import AddIcon from "@mui/icons-material/Add";
+import Fab from "@mui/material/Fab";
+import { ENDPOINT } from "../config";
 
 export function Listes() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export function Listes() {
       })
       .then((res) => {
         if (!res.data.auth) {
-          navigate('/login');
+          navigate("/login");
         }
       })
       .catch((error) => {
@@ -60,19 +60,15 @@ export function Listes() {
       <h1>Listes</h1>
       <div className="Listes">
         {listes.map((liste) => (
-          <Link
-            key={liste.idListe}
-            className="Liste"
-            to={`/candidats/${liste.idListe}`}
-          >
+          <Link key={liste.id} className="Liste" to={`/candidats/${liste.id}`}>
             <div className="">
               <h1 className="titreListe">{liste.nomListe}</h1>
               <div className="candidats">
                 {candidats.map(function imgReturn(candidat) {
-                  if (candidat.idListeElec === liste.idListe) {
+                  if (candidat.idListeElec === liste.id) {
                     return (
                       <img
-                        key={candidat.idCandidat}
+                        key={candidat.id}
                         src={candidat.photo}
                         alt="candidat"
                         className="candidatPhotoPetit"

@@ -5,19 +5,19 @@ create database safevote;
 use safevote;
 
 CREATE TABLE candidats(
-    idCandidat INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     nomC VARCHAR(50),
     prenomC VARCHAR(50),
     partiPolitique VARCHAR(50),
     photo varchar(500),
     idListeElec int,
-    PRIMARY KEY(idCandidat)
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE listeElectorale(
-    idListe INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     nomListe VARCHAR(50),
-    PRIMARY KEY(idListe)
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE utilisateurs(
@@ -33,33 +33,56 @@ CREATE TABLE utilisateurs(
 );
 
 CREATE TABLE sondage(
-    idSondage INT NOT NULL auto_increment unique,
+    id INT NOT NULL auto_increment unique,
     titre varchar(60),
     descr varchar(500),
     option1 varchar (100),
     option2 varchar (100),
     option3 varchar (100),
     option4 varchar (100),
-    userID int
+    userId int,
+    PRIMARY KEY(id)
 );
 
-insert into sondage(titre,descr,option1,option2,option3,option4) values ('Sondage politique',"S'il y avait des élections générales demain, pour quel parti voteriez-vous?",'droite','centre','gauche','abstention');
+insert into
+    sondage(titre, descr, option1, option2, option3, option4)
+values
+    (
+        'Sondage politique',
+        "S'il y avait des élections générales demain, pour quel parti voteriez-vous?",
+        'droite',
+        'centre',
+        'gauche',
+        'abstention'
+    );
 
 drop table if exists voteListe;
 
-CREATE TABLE voteListe(idUser INT, idCandidat INT, idListe int);
+CREATE TABLE voteListe(
+    id INT NOT NULL AUTO_INCREMENT UNIQUE,
+    userId INT,
+    idCandidat INT,
+    idListe int,
+    PRIMARY KEY(id)
+);
 
 drop table if exists voteSondage;
 
-create table voteSondage(idUser int, idSondage int, choix int);
+create table voteSondage(
+    id INT NOT NULL AUTO_INCREMENT UNIQUE,
+    userId int,
+    idSondage int,
+    choix int,
+    PRIMARY KEY(id)
+);
 
 INSERT INTO
-    listeElectorale(idListe, nomListe)
+    listeElectorale(id, nomListe)
 VALUES
     (1, 'Élections présidentielles');
 
 INSERT INTO
-    listeElectorale(idListe, nomListe)
+    listeElectorale(id, nomListe)
 VALUES
     (2, 'Le meilleur étudiant');
 
@@ -129,7 +152,7 @@ VALUES
         'malo@gmail.com',
         'Master',
         'Malo',
-        '$2b$10$L3EjdaIp7mhposf.awcCoOh1h4rJUT5EiTLbYQOSmqziHy9bIxNhW',
+        '$2b$10$VkBHNpCLvB.HnvEuESIpculNBHRqpy.AwuPvALUEUaS/wSBR1ohjK',
         '12-05-2001',
         'Mr',
         '0684456257'
@@ -359,7 +382,7 @@ VALUES
         'https://www.debout-la-france.fr/sites/default/files/membre/nda.jpg',
         1
     );
-    
+
 INSERT INTO
     candidats(
         nomC,
