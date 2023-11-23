@@ -16,7 +16,7 @@ const VoteSondage = require("./models/VoteSondage");
 const Sondage = require("./models/Sondage");
 const ListeElectorale = require("./models/ListeElectorale");
 let options = {
-  host: process.env.DB_HOST,
+  host: "mysql-service",
   user: "root",
   port: 3306,
   password: "password",
@@ -166,8 +166,12 @@ app.get("/candidats/:id", async (req, res) => {
 });
 
 app.get("/candidats", async (req, res) => {
-  const candidats = await Candidat.findAll();
-  return res.status(200).json({ candidats });
+  try {
+    const candidats = await Candidat.findAll();
+    return res.status(200).json({ candidats });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.post("/checkVote", async (req, res) => {

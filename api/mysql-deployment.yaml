@@ -50,19 +50,19 @@ metadata:
 data:
   initdb.sql: |
     CREATE TABLE candidats(
-    idCandidat INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT,
     nomC VARCHAR(50),
     prenomC VARCHAR(50),
     partiPolitique VARCHAR(50),
     photo varchar(500),
     idListeElec int,
-    PRIMARY KEY(idCandidat)
+    PRIMARY KEY(id)
     );
 
     CREATE TABLE listeElectorale(
-        idListe INT NOT NULL AUTO_INCREMENT,
+        id INT NOT NULL AUTO_INCREMENT,
         nomListe VARCHAR(50),
-        PRIMARY KEY(idListe)
+        PRIMARY KEY(id)
     );
 
     CREATE TABLE utilisateurs(
@@ -78,33 +78,56 @@ data:
     );
 
     CREATE TABLE sondage(
-        idSondage INT NOT NULL auto_increment unique,
+        id INT NOT NULL auto_increment unique,
         titre varchar(60),
         descr varchar(500),
         option1 varchar (100),
         option2 varchar (100),
         option3 varchar (100),
         option4 varchar (100),
-        userId int
+        userId int,
+        PRIMARY KEY(id)
     );
 
-    insert into sondage(titre,descr,option1,option2,option3,option4) values ('Sondage politique',"S'il y avait des élections générales demain, pour quel parti voteriez-vous?",'droite','centre','gauche','abstention');
+    insert into
+        sondage(titre, descr, option1, option2, option3, option4)
+    values
+        (
+            'Sondage politique',
+            "S'il y avait des élections générales demain, pour quel parti voteriez-vous?",
+            'droite',
+            'centre',
+            'gauche',
+            'abstention'
+        );
 
     drop table if exists voteListe;
 
-    CREATE TABLE voteListe(userId INT, idCandidat INT, idListe int);
+    CREATE TABLE voteListe(
+        id INT NOT NULL AUTO_INCREMENT UNIQUE,
+        userId INT,
+        idCandidat INT,
+        idListe int,
+        PRIMARY KEY(id)
+    );
 
     drop table if exists voteSondage;
 
-    create table voteSondage(userId int, idSondage int, choix int);
+    create table voteSondage(
+        id INT NOT NULL AUTO_INCREMENT UNIQUE,
+        userId int,
+        idSondage int,
+        choix int,
+        PRIMARY KEY(id)
+    );
 
     INSERT INTO
-        listeElectorale(idListe, nomListe)
+        listeElectorale(id, nomListe)
     VALUES
         (1, 'Élections présidentielles');
 
     INSERT INTO
-        listeElectorale(idListe, nomListe)
+        listeElectorale(id, nomListe)
     VALUES
         (2, 'Le meilleur étudiant');
 
@@ -404,7 +427,7 @@ data:
             'https://www.debout-la-france.fr/sites/default/files/membre/nda.jpg',
             1
         );
-        
+
     INSERT INTO
         candidats(
             nomC,
@@ -421,3 +444,5 @@ data:
             'https://www.lutece-papierpeint.com/wp-content/uploads/2019/04/51145606C.jpg',
             1
         );
+    ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY 'password';
+    flush privileges;

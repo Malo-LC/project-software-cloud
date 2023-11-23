@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../database");
 
 const ListeElectorale = sequelize.db.define(
-  "listeelectorale",
+  "listeElectorale",
   {
     id: {
       type: DataTypes.INTEGER,

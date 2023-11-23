@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../database");
 
 const Utilisateur = sequelize.db.define(
-  "Utilisateur",
+  "utilisateurs",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -35,6 +35,7 @@ const Utilisateur = sequelize.db.define(
   },
   {
     timestamps: false,
+    freezeTableName: true,
   }
 );
 

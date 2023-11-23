@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 
 const db = new Sequelize("safevote", "root", "password", {
-  host: process.env.DB_HOST,
+  host: "mysql-service",
   dialect: "mysql",
   logging: false,
 });
