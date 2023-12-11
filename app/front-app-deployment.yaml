@@ -13,14 +13,14 @@ spec:
     spec:
       containers:
         - name: front-app
-          image: localhost:3000/frontend:1.0
+          image: malolc/frontend:1.0
           ports:
             - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: front-app-service
+  name: front-app
 spec:
   selector:
     app: front-app
